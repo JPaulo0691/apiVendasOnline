@@ -33,17 +33,17 @@ public class Cliente {
 	private Integer id;
 	
 	@Column(nullable = false, length = 100)
-	@NotEmpty(message = "Campo nome não pode ser vazio.")
+	@NotEmpty(message = "{nome.obrigatorio}")
 	private String nome;
 	
 	@Column(nullable = false, unique = true, length = 11)
-	@NotEmpty(message = "Campo CPF é obrigatório.")
+	@NotEmpty(message = "{cpf.obrigatorio}")
 	@CPF
 	private String cpf;
 	
 	@Column(nullable = false, unique = true, length = 50)
-	@NotEmpty(message = "O campo emailnão pode ser vazio.")
-	@Email(message = "Esse não é um email válido")
+	@NotEmpty(message = "{email.obrigatorio}")
+	@Email
 	private String email;	
 	
 	// um cliente para muitos pedidos(OneToMany), quando uso o FetchType.EAGER, ele traz todas as relações 

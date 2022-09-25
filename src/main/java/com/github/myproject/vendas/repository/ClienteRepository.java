@@ -11,6 +11,7 @@ import com.github.myproject.vendas.model.Cliente;
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
 	boolean existsByEmail(String email);
+	boolean existsByCpf(String CPF);
 
 	@Query(value = "SELECT * FROM CLIENTES WHERE NOME LIKE %:NOME%", nativeQuery = true) 
 	List<Cliente> encontrarPorNome(@Param("NOME") String nome);	 

@@ -35,6 +35,10 @@ public class ClientesService {
 		return clienteRepository.existsByEmail(email);
 	}
 	
+	public boolean existsCadastro(String cpf) {
+		return clienteRepository.existsByCpf(cpf);
+	}
+	
 	public List<Cliente> consultarPorNome(String nome){
 		return clienteRepository.encontrarPorNome(nome);
 	}

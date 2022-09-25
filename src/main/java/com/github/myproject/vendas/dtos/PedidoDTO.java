@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.github.myproject.vendas.customAnotations.NotEmptyList;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PedidoDTO {
 	
-	@NotNull(message = "Informe o código do cliente")
+	@NotNull(message = "{codigo-cliente.obrigatorio}")
 	private Integer cliente;
-	@NotNull(message = "Campo Total do pedido é obrigatório")
+	@NotNull(message = "{total-pedido.obrigatorio}")
 	private BigDecimal total;
+	@NotEmptyList(message = "{itens-pedido.obrigatorio}")
 	private List<ItemPedidoDTO> itens;
 
 }

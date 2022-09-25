@@ -37,6 +37,10 @@ public class ClienteController {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe um cliente com este email!");
 		}
 		
+		if(clientesService.existsCadastro(cliente.getCpf())) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Este CPF já possui cadastro");
+		}
+		
 		clientesService.cadastrar(cliente);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body("Cliente cadastrado com Sucesso!");
