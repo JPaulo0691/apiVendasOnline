@@ -3,6 +3,8 @@ package com.github.myproject.vendas.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class ProdutoController {
 	
 	@PostMapping("/cadastrar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<String> cadastrar(@RequestBody Produto produto) {
+	public ResponseEntity<String> cadastrar(@RequestBody @Valid Produto produto) {
 		
 		produtoService.cadastrarProdutos(produto);
 		return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com Sucesso!");
@@ -46,7 +48,7 @@ public class ProdutoController {
 	}
 	
 	@PutMapping("/atualizarprodutos/{id}")
-	public ResponseEntity<String> atualizar(@PathVariable Integer id, @RequestBody Produto produto) {
+	public ResponseEntity<String> atualizar(@PathVariable @Valid Integer id, @RequestBody Produto produto) {
 		
 		if(produtoService.getById(id).isEmpty()){
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Dados não encontrados");

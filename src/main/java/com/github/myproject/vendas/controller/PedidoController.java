@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,7 @@ public class PedidoController {
 	
 	@PostMapping
 	// tem que transformar o DTO pro modelo de dados 
-	public ResponseEntity<String> cadastroPedido(@RequestBody PedidoDTO pedidoDTO){
+	public ResponseEntity<String> cadastroPedido(@RequestBody @Valid PedidoDTO pedidoDTO){
 		
 		Pedido pedido = pedidoService.cadastrarPedido(pedidoDTO);
 		

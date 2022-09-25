@@ -3,6 +3,8 @@ package com.github.myproject.vendas.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class ClienteController {
 	ClientesService clientesService;
 	
 	@PostMapping("/cadastro")
-	public ResponseEntity<Object> cadastrarCliente(@RequestBody @Validated Cliente cliente){
+	public ResponseEntity<Object> cadastrarCliente(@RequestBody @Valid Cliente cliente){
 		
 		if(clientesService.validarEmail(cliente.getEmail())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe um cliente com este email!");
@@ -62,7 +64,7 @@ public class ClienteController {
 	}
 	
 	@PutMapping("/atualizarcadastro/{id}")
-	public ResponseEntity<Object> atualizarCadastro(@PathVariable(value = "id")Integer id,
+	public ResponseEntity<Object> atualizarCadastro(@PathVariable(value = "id") @Valid Integer id,
 			@RequestBody Cliente cliente){
 		
 		ResponseEntity.status(HttpStatus.CREATED).body(clientesService.atualizar(id,cliente));

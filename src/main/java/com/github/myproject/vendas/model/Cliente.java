@@ -10,6 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,12 +33,17 @@ public class Cliente {
 	private Integer id;
 	
 	@Column(nullable = false, length = 100)
+	@NotEmpty(message = "Campo nome não pode ser vazio.")
 	private String nome;
 	
 	@Column(nullable = false, unique = true, length = 11)
+	@NotEmpty(message = "Campo CPF é obrigatório.")
+	@CPF
 	private String cpf;
 	
 	@Column(nullable = false, unique = true, length = 50)
+	@NotEmpty(message = "O campo emailnão pode ser vazio.")
+	@Email(message = "Esse não é um email válido")
 	private String email;	
 	
 	// um cliente para muitos pedidos(OneToMany), quando uso o FetchType.EAGER, ele traz todas as relações 
