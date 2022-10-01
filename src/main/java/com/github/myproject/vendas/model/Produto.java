@@ -34,6 +34,6 @@ public class Produto {
 	
 	@Column(name = "preco_unitario")
 	@NotNull(message = "O campo preço não pode ser nulo")
-	private BigDecimal preco_unitario;
+	private BigDecimal preco_unitario = new BigDecimal("0.0");
 	
 }

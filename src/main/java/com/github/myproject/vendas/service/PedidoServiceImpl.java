@@ -1,5 +1,6 @@
 package com.github.myproject.vendas.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -7,11 +8,13 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.myproject.vendas.dtos.ItemPedidoDTO;
 import com.github.myproject.vendas.dtos.PedidoDTO;
+import com.github.myproject.vendas.dtos.ProdutoDTO;
 import com.github.myproject.vendas.enums.StatusPedido;
 import com.github.myproject.vendas.exception.OrderNotFounException;
 import com.github.myproject.vendas.exception.RegrasException;
@@ -44,18 +47,32 @@ public class PedidoServiceImpl implements PedidoService{
 	public Pedido cadastrarPedido(PedidoDTO pedidoDTO) {
 		
 		Integer idCliente = pedidoDTO.getCliente();
+		//Optional<Produto> idProduto = produtosRepository.findById(produto.getId_produto());	
 		
+		Produto produto = new Produto();
+		Optional<Produto> idProduto = produtosRepository.findById(5);
+		
+		ItemPedido item =  new ItemPedido();
+		Optional<ItemPedido> itemQtd = itemPedidoRepository.findById(item.getId_item_pedido());				
+				
 		Cliente cliente = clienteRepository.findById(idCliente)
 		.orElseThrow( () -> new RegrasException("Código de Cliente Inválido"));
 		
 		Pedido pedido = new Pedido();
 		
-		pedido.setTotal(pedidoDTO.getTotal());
+		pedido.setTotal(calcular(idProduto.get().getPreco_unitario(), itemQtd.get().getQuantidade()));
 		pedido.setData_pedido(LocalDate.now());
 		pedido.setCliente_id(cliente);
 		pedido.setStatus(StatusPedido.REALIZADO);
 		
 		List<ItemPedido> itemPedido = converterItens(pedido, pedidoDTO.getItens());
+		
+		/*
+		 * var produto = new Produto(); var item = new ItemPedido();
+		 * 
+		 * BeanUtils.copyProperties(produtoDTO, produto);
+		 * BeanUtils.copyProperties(itemDTO, item);
+		 */
 		
 		pedidoRepository.save(pedido);
 		itemPedidoRepository.saveAll(itemPedido);
@@ -105,20 +122,17 @@ public class PedidoServiceImpl implements PedidoService{
 			return pedidoRepository.save(pedido);
 		}).orElseThrow(() -> new OrderNotFounException("Pedido Não Encontrado!"));
 		
-	}
+	}	
 	
-	/*
-	 * private BigDecimal calcular() {
-	 * 
-	 * Produto produto = new Produto(); BigDecimal valor =
-	 * produto.getPreco_unitario();
-	 * 
-	 * ItemPedidoDTO item = new ItemPedidoDTO(); BigDecimal qtd =
-	 * BigDecimal.valueOf(item.getQuantidade());
-	 * 
-	 * BigDecimal total = valor.multiply(qtd);
-	 * 
-	 * return total; }
-	 */
+	private BigDecimal calcular(BigDecimal preco, Integer quantidade) {
+		
+		BigDecimal qtd =  BigDecimal.valueOf(quantidade);
+		  
+		BigDecimal total = preco.multiply(qtd);		  
+		
+		return total; 
+	}
+	 
+	 
 		
 }

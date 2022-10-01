@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.myproject.vendas.dtos.ClienteDTO;
 import com.github.myproject.vendas.model.Cliente;
 import com.github.myproject.vendas.service.ClientesService;
 
@@ -31,15 +33,18 @@ public class ClienteController {
 	ClientesService clientesService;
 	
 	@PostMapping("/cadastro")
-	public ResponseEntity<Object> cadastrarCliente(@RequestBody @Valid Cliente cliente){
+	public ResponseEntity<Object> cadastrarCliente(@RequestBody @Valid ClienteDTO clienteDTO){
 		
-		if(clientesService.validarEmail(cliente.getEmail())) {
+		if(clientesService.validarEmail(clienteDTO.getEmail())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe um cliente com este email!");
 		}
 		
-		if(clientesService.existsCadastro(cliente.getCpf())) {
+		if(clientesService.existsCadastro(clienteDTO.getCpf())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Este CPF já possui cadastro");
 		}
+		
+		var cliente = new Cliente();
+		BeanUtils.copyProperties(clienteDTO, cliente);
 		
 		clientesService.cadastrar(cliente);
 		

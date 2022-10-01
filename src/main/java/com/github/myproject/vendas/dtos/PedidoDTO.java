@@ -1,6 +1,5 @@
 package com.github.myproject.vendas.dtos;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -18,8 +17,6 @@ public class PedidoDTO {
 	
 	@NotNull(message = "{codigo-cliente.obrigatorio}")
 	private Integer cliente;
-	@NotNull(message = "{total-pedido.obrigatorio}")
-	private BigDecimal total;
 	@NotEmptyList(message = "{itens-pedido.obrigatorio}")
 	private List<ItemPedidoDTO> itens;
 

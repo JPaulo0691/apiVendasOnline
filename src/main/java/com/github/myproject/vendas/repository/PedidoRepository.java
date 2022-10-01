@@ -1,8 +1,8 @@
 package com.github.myproject.vendas.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.myproject.vendas.model.Cliente;
 import com.github.myproject.vendas.model.Pedido;
+import com.github.myproject.vendas.model.Produto;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Integer>{
 	
@@ -27,5 +28,15 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer>{
 			+ "WHERE P.ID_PEDIDO = :id ",
 			nativeQuery = true)
 	Optional<Pedido> findByIdFetchItens(@Param("id") Integer id);
-
+	
+	@Query(value = "SELECT (ITP.QUANTIDADE * PRECO_UNITARIO) AS TOTAL "
+				 + "FROM ITEM_PEDIDO ITP "
+				 + "	INNER JOIN PEDIDO PE "
+				 + "    ON ITP.ID_PEDIDO = PE.ID_PEDIDO "
+				 + "    INNER JOIN PRODUTO PR "
+				 + "    ON ITP.ID_PRODUTO = PR.ID_PRODUTO "
+				 + "	INNER JOIN CLIENTES C"
+				 + "	ON PE.ID = C.ID "
+				 + "WHERE C.ID =  :id ", nativeQuery = true)
+	BigDecimal total(@Param("id") Integer id);
 }

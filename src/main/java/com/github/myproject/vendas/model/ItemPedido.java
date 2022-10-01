@@ -37,6 +37,6 @@ public class ItemPedido {
 	private Produto produto_id;
 	
 	@Column(name = "quantidade")
-	private Integer quantidade;
+	private Integer quantidade = 0;
 	
 }
